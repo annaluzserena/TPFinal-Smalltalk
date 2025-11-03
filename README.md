@@ -1,11 +1,24 @@
 # TPFinal-Smalltalk
-|col |
-
-
+[
 nom:=Prompter prompt: 'Ingrese nombre de la biblioteca'.
-barrio:=Prompter prompt:'Ingrese barrio de la biblioteca'.
-anio:=(Prompter  prompt: 'Ingrese anio de creacion')asNumber .
+   valido := nom notEmpty.
+   valido ifFalse: [MessageBox notify: 'El nombre no puede ser vacío.'].
+] whileFalse.
+[
+barrio:=Prompter prompt:'Ingrese barrio de la biblioteca'. valido := barrio notEmpty.
+    valido ifFalse: [MessageBox notify: 'El barrio no puede ser vacío.'].
+] whileFalse.
+[
+anio:=(Prompter  prompt: 'Ingrese anio de creacion')asNumber . 
+valido := (anio <= DateAndTime year).
+valido ifFalse: [MessageBox notify: 'El anio no a sido transcurrido.'].
+] whileFalse.
+
+[
 cantper:=(Prompter prompt: 'Ingrese cantidad de personal de la biblioteca')asNumber.
+ valido := (cantper > 0).
+ valido ifFalse: [MessageBox notify: 'Cantidad de personal debe ser un número positivo.'].
+] whileFalse.
 
 biblio:= Biblioteca crearBiblioNom: nom anio:anio barrio:barrio personal: cantper.
 "Menu para TP integrador"
@@ -29,28 +42,45 @@ seguir:= true.
 	"Menu implementado con un diccionario que devuelve un numero (dependiendo la opcion) en vez de un string"
 	op:= dicOp keyAtValue: (ChoicePrompter choices: (dicOp values asOrderedCollection) caption: 'Menu - Gestion de libros').
         
-        (op==1 ) IfTrue [
-      [seg] whileTrue: [
-       choice := MessageBox choices: {'Regular'. 'Manual'} .
-       choice=='Regular' ifTrue [ libro:=LibroRegular crear: nom con: aniopub con: genero con: codigo con:stock.
-         nom:=  Prompter prompt:'Ingrese titulo del libro' .
-         aniopub:= (Prompter prompt: 'Ingrese anio d epublicacion').
-         genero:=Prompter  prompt:  'Ingrese genero del libro'.
-         codigo:=(Prompter  prompt:  'Ingrese codigo de identificacion')asNumber.
-         stock:=(Prompter  prompt: 'Ingrese cantidad de copias disponibles' )asNumber. 
-].
-       choice=='Manual' ifTrue [libro:=LibroManual crear: nom con: aniopub con:genero con: codigo con:stock con:cant.
-         nom:=  Prompter prompt:'Ingrese titulo del libro' .
-         aniopub:= (Prompter prompt: 'Ingrese anio d epublicacion').
-         genero:=Prompter  prompt:  'Ingrese genero del libro'.
-         codigo:=(Prompter  prompt:  'Ingrese codigo de identificacion')asNumber.
-         stock:=(Prompter  prompt: 'Ingrese cantidad de copias disponibles' )asNumber.
-         cant:=(Prompter  prompt: 'Ingrese cantidad de veces que se presto' )asNumber.
-         ].
-       biblio agregarLibro: libro.
-       seg:=MessageBox confirm: 'Desea seguir cargando otro libro'.
-         ].
-     ].
+        (op==1 ) IfTrue [[seg] whileTrue: [
+            choice := MessageBox choices: {'Regular', 'Manual'}.
+         [   nom := Prompter prompt: 'Ingrese título del libro'.
+		     valido := nom notEmpty.
+             valido ifFalse: [MessageBox notify: 'El título no puede ser vacío.'].
+             ] whileFalse.
+         [  aniopub := (Prompter prompt: 'Ingrese año de publicación') asNumber.
+            valido := (aniopub >= 1500 and: [aniopub <= DateAndTime year]).
+            valido ifFalse: [MessageBox notify: 'Año de publicación inválido.'].
+            ] whileFalse.
+
+          [ genero := Prompter prompt: 'Ingrese género del libro'.
+		     valido := genero notEmpty.
+             valido ifFalse: [MessageBox notify: 'El género no puede ser vacío.'].
+             ] whileFalse.
+			
+          [  codigo := (Prompter prompt: 'Ingrese código de identificación') asNumber. 
+		     valido := (codigo >= 0 and: [biblio verTodos collect:
+			 [:cod | cod vercodigo] includes:codigo not]).
+             valido ifFalse: [MessageBox notify: 'Código inválido o ya existente.'].
+           ] whileFalse.
+			
+           [ stock := (Prompter prompt: 'Ingrese cantidad de copias disponibles') asNumber.
+			 valido := (stock >= 0).
+             valido ifFalse: [MessageBox notify: 'Stock no puede ser negativo.'].
+             ] whileFalse.
+
+            choice = 'Regular' ifTrue: [
+                libro := LibroRegular crear: nom con: aniopub con: genero con: codigo con: stock.
+            ].
+
+            choice = 'Manual' ifTrue: [
+			 cant:=0 "por defecto"
+           [ cant := (Prompter prompt: 'Ingrese cantidad de veces que se prestó') asNumber.
+		     valido := (cant >= 0).
+             valido ifFalse: [MessageBox notify: 'La cantidad de prestaciones no puede dar                    negativa.']] whileFalse.
+    ].
+             libro := LibroManual crear: nom con: aniopub con: genero con: codigo con:
+      
       (op==2)  ifTrue: [ 
      [seguir] whileTrue: [ codigo:= (Prompter prompt: 'Ingrese codigo del libro ')asNumber.
         col:= biblio verTodos. 
