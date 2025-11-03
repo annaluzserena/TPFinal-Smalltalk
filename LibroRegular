@@ -1,0 +1,14 @@
+﻿"Filed out from Dolphin Smalltalk"!
+
+Core.Libro
+	subclass: #'Core.LibroRegular'
+	instanceVariableNames: ''
+	classVariableNames: ''
+	imports: #()
+	classInstanceVariableNames: ''
+	classConstants: {}!
+
+Core.LibroRegular guid: (Core.GUID fromString: '{dbe91cea-77ac-4dc9-a288-a21156985e49}')!
+
+Core.LibroRegular comment: ''!
+
