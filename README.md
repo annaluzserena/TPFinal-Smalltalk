@@ -127,31 +127,7 @@ seguir:= true.
                                    show: 'Tipo:', (libro vertipo);cr;
                                    show: 'Anio de creacion:' , (libro veraniopub); cr. ].
         ].
-       (op==4)ifTrue: [
-        col2:=biblio verTodos.
-        ochentoso:= col2 select: [:libro| libro veraniopub 1980 and: [libro veraniopub <=  1990] ].
-        ochetonso do: [:libro | 
-                                   Transcript  show: : 'Titulo:', (libro  vertitulo); cr ;
-                                   show: 'Genero:', (libro vergenero) ; cr;
-                                   show: 'Tipo:', (libro vertipo);cr;
-                                   show: 'Anio de creacion:' , (libro veraniopub); cr;
-                                   show: 'Stock:', (libro vercantcopias).
-       ].
-       (op==5)ifTrue: [
-       gen:=Prompter prompt: 'Ingrese el genero del libro:'.
-       col3:=biblio verTodos.
-       cantgenero:= col3 select: [:libro|
-                                                  libro ver genero == gen].
-       cantgenero do: [:libro|  
-                                  Transcript show:   'Stock:', (libro vercantcopias).]
-      ].
-       (op=6)ifTrue: [ 
-       col4:=biblio verTodos.
-       sincantidad:=col4 select: [: libro | 
-                                    libro verstock == 0].
-       sincantidad do: [: libro| biblio eliminarLibro: libro ].
-          
-].
+
 ].
 
 
