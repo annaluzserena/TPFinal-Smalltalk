@@ -24,12 +24,13 @@ valido:=false.
 biblio:= Biblioteca crearBiblioNom: nom anio:anio barrio:barrio personal: cantper.
 
 "Bloque de codigo reutilizable para listar los datos de un libro"
-listar:= [ :libro | ((libro class) == (LibroRegular class)) ifTrue: [tipo:='Regular'.] ifFalse: [tipo:='Manual'.].
+listar:= [ :libro |
 				Transcript show: 'Titulo: ',(libro titulo); cr ;
 				show: 'Genero: ', (libro genero) ; cr;
 				show: 'Anio de creacion: ',(libro anio displayString); cr;
-				show: 'Copias disponibles: ', (libro copias displayString); cr;
-				show: 'Tipo: ',tipo ; cr.].
+				show: 'Copias disponibles: ', (libro copias displayString); cr.
+				((libro class) == (LibroRegular class)) ifTrue: [tipo:='Regular'.] ifFalse: [tipo:='Manual'. Transcript show: 'Cantidad de veces solicitado: ',(libro solicitado displayString); cr.].
+				Transcript show: 'Tipo: ',tipo ; cr.].
 
 "Menu usando un diccionario para que retorne un numero y no un string con la opcion completa"
 dicOp:= OrderedDictionary new.
@@ -192,5 +193,6 @@ seguir:= true.
 	].
 
 ].
+
 
 
