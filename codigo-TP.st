@@ -25,11 +25,11 @@ biblio:= Biblioteca crearBiblioNom: nom anio:anio barrio:barrio personal: cantpe
 
 "Bloque de codigo reutilizable para listar los datos de un libro"
 listar:= [ :libro |
-				Transcript show: 'Titulo: ',(libro titulo); cr ;
-				show: 'Genero: ', (libro genero) ; cr;
-				show: 'Anio de creacion: ',(libro anio displayString); cr;
-				show: 'Copias disponibles: ', (libro copias displayString); cr.
-				((libro class) == (LibroRegular class)) ifTrue: [tipo:='Regular'.] ifFalse: [tipo:='Manual'. Transcript show: 'Cantidad de veces solicitado: ',(libro solicitado displayString); cr.].
+				Transcript show: 'Titulo: ',(libro verTitulo); cr ;
+				show: 'Genero: ', (libro verGenero) ; cr;
+				show: 'Anio de creacion: ',(libro verAnio displayString); cr;
+				show: 'Copias disponibles: ', (libro verCopias displayString); cr.
+				((libro class) == (LibroRegular class)) ifTrue: [tipo:='Regular'.] ifFalse: [tipo:='Manual'. Transcript show: 'Cantidad de veces solicitado: ',(libro verSolicitado displayString); cr.].
 				Transcript show: 'Tipo: ',tipo ; cr.].
 
 "Menu usando un diccionario para que retorne un numero y no un string con la opcion completa"
@@ -89,7 +89,10 @@ seguir:= true.
 				libro:= LibroRegular crearLib: nom con: aniopub con: genero con: codigo con: stock.
 			].
 			choice=='Manual' ifTrue: [
-				libro:=LibroManual crearLib: nom con: aniopub con: genero con: codigo con: stock.
+				solicitado:= Prompter prompt: 'Ingrese cantidad de veces que fue solicitado'.
+				((solicitado allSatisfy: [:c | c isDigit]) and: [solicitado asNumber >= 0]) ifFalse: [MessageBox notify: 'La cantidad de veces que fue solicitado debe ser un numero y no puede ser negativa'.] ifTrue: [valido:=true.].
+			].
+				libro:=LibroManual crearLib: nom con: aniopub con: genero con: codigo con: stock con: solicitado.
 			].
 			biblio agregarLibro: libro.
 			seg:=MessageBox confirm: 'Desea cargar otro libro?'.
@@ -183,16 +186,51 @@ seguir:= true.
 		].
 	].
 
-	(op==3) ifTrue: [ 
-        ].
-	(op==4)ifTrue: [
-	].
 
-	(op==0) ifTrue: [
+	(op==3) ifTrue: [ 
+     (biblio esVacia) ifFalse: [ 	 
+	  col:= biblio verTodos.
+	  listarmasdecinco:= col select:[: libro | libro verCopias > 5].
+	  (listarmasdecinco size > 0)ifTrue:[
+	  listarmascincco do: [: libro | listar value: libro].
+		.]ifFalse:[MessageBox notify:'Error: No se encontraron libros que tenga una cantidad de copias mayor a 5']
+     .] ifTrue:[MessageBox notify:'Error la biblioteca esta vacia'].
+]. 
+	(op==4)ifTrue: [
+	  (biblio esVacia) ifFalse: [ 	 
+	  col:= biblio verTodos.
+	  listarochentoso:= col select:[: libro | libro verAnio >= 1980 and [libro verAnio=1990]].
+	  (listarochentoso size > 0)ifTrue:[
+	  listarochentoso do: [: libro | listar value: libro].
+	 .]ifFalse:[MessageBox notify:'Error: No se encontro el anio ingresado'].
+      ] ifTrue:[MessageBox notify:'Error la biblioteca esta vacia'].
+    ]. 
+  ].
+    (op==5)ifTrue[
+	   (biblio esVacia) ifFalse: [ 
+		d:=Dictionary new.
+	    col:= biblio verTodos.
+		genero:= col collect:[:libro | libro verGenero].
+		generosinrepe:= genero asSet.
+		generosinrepe do:[: a | d at:a put:(genero ocurrencesOf:a).
+        Transcrip show:'Cantidad de  libro de genero:', a,' ', d at:a.
+	.]ifTrue:[MessageBox notify:'Error:No se puede buscar datos sobre el genero del libro, la biblioteca esta vacia'].
+	]. 
+	 (op==6)ifTrue[
+     (biblio esVacia) ifFalse: [ 
+	 col:= biblio verTodos.
+	 sincopias:= col select:[: libro | libro verCopias == 0].
+	 sincopias do:[: libro | listar value: libro.
+	 biblio eliminarLibro:libro.
+	 Transcrip show:'Se a eliminado el libro con exito'].
+	 ]ifTrue:[MessageBox notify'Error: biblioeca sin libros cargados'].
+	].
+	 (op==0) ifTrue: [
 		seguir:=false.
 	].
 
 ].
+
 
 
 
