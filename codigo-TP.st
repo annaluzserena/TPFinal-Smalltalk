@@ -1,4 +1,6 @@
-﻿| col nom barrio anio cantper biblio seguir dicOp op choice aniopub genero codigo stock cant seg smod valido libro choicemod ops |
+| col nom barrio anio cantper biblio seguir dicOp op choice aniopub genero codigo stock cant seg smod valido libro choicemod ops |
+
+Transcript clear.
 
 valido:=false.
 [valido] whileFalse: [
@@ -25,12 +27,13 @@ biblio:= Biblioteca crearBiblioNom: nom anio:anio barrio:barrio personal: cantpe
 
 "Bloque de codigo reutilizable para listar los datos de un libro"
 listar:= [ :libro |
+				Transcript show.
 				Transcript show: 'Titulo: ',(libro verTitulo); cr ;
 				show: 'Genero: ', (libro verGenero) ; cr;
 				show: 'Anio de creacion: ',(libro verAnio displayString); cr;
 				show: 'Copias disponibles: ', (libro verCopias displayString); cr.
-				((libro class) == (LibroRegular class)) ifTrue: [tipo:='Regular'.] ifFalse: [tipo:='Manual'. Transcript show: 'Cantidad de veces solicitado: ',(libro verSolicitado displayString); cr.].
-				Transcript show: 'Tipo: ',tipo ; cr.].
+				((libro class class) == (LibroRegular class)) ifTrue: [tipo:='Regular'.] ifFalse: [tipo:='Manual'. Transcript show: 'Cantidad de veces solicitado: ',(libro verSolicitado displayString); cr.].
+				Transcript show: 'Tipo: ',tipo ; cr.]. 
 
 "Menu usando un diccionario para que retorne un numero y no un string con la opcion completa"
 dicOp:= OrderedDictionary new.
@@ -53,7 +56,7 @@ seguir:= true.
 	(op==1) ifTrue: [
 		seg:=true.
 		[seg] whileTrue: [
-			choice := ChoicePrompter choices: {'Regular'. 'Manual'} caption: 'Elija el tipo de libro' .
+			choice := ChoicePrompter choices: #('Regular' 'Manual') caption: 'Elija el tipo de libro' .
 			valido:=false.
 			[valido] whileFalse: [
 				nom:= (Prompter prompt:'Ingrese titulo del libro')asUppercase.
@@ -75,29 +78,28 @@ seguir:= true.
 				(codigo allSatisfy: [:c | c isDigit]) ifTrue: [
 					codigo:=codigo asNumber.
 					(biblio esVacia) ifFalse: [
-					col:= biblio verTodos collect: [:l | l id].
-					(col includes: codigo) ifTrue: [MessageBox notify: 'El codigo ya esta registrado en otro libro'.] ifFalse: [valido:=true.].
+						col:= biblio verTodos collect: [:l | l verCodigo].
+						(col includes: codigo) ifTrue: [MessageBox notify: 'El codigo ya esta registrado en otro libro'.] ifFalse: [valido:=true.].
 					] ifTrue: [valido:=true.].
 				] ifFalse: [MessageBox notify: 'El codigo debe ser un numero'.].
 			].
 			valido:=false.
 			[valido] whileFalse: [
 				stock:=Prompter prompt: 'Ingrese cantidad de copias disponibles'.
-				((stock allSatisfy: [:c | c isDigit]) and: [stock asNumber >= 0]) ifFalse: [MessageBox notify: 'La cantidad de copias debe ser un numero y no puede ser negativa'.] ifTrue: [valido:=true.].
+				((stock allSatisfy: [:c | c isDigit]) and: [stock asNumber >= 0]) ifFalse: [MessageBox notify: 'La cantidad de copias debe ser un numero y no puede ser negativa'.] ifTrue: [stock:= stock asNumber. valido:=true.].
 			].
-			choice=='Regular' ifTrue: [
+			(choice='Regular') ifTrue: [
 				libro:= LibroRegular crearLib: nom con: aniopub con: genero con: codigo con: stock.
 			].
-			choice=='Manual' ifTrue: [
+			(choice='Manual') ifTrue: [
 				solicitado:= Prompter prompt: 'Ingrese cantidad de veces que fue solicitado'.
 				((solicitado allSatisfy: [:c | c isDigit]) and: [solicitado asNumber >= 0]) ifFalse: [MessageBox notify: 'La cantidad de veces que fue solicitado debe ser un numero y no puede ser negativa'.] ifTrue: [valido:=true.].
-			].
 				libro:=LibroManual crearLib: nom con: aniopub con: genero con: codigo con: stock con: solicitado.
 			].
 			biblio agregarLibro: libro.
 			seg:=MessageBox confirm: 'Desea cargar otro libro?'.
+			].
 		].
-	].
 	(op==2)  ifTrue: [ 
 		(biblio esVacia) ifTrue: [MessageBox notify: 'No hay libros en la biblioteca'. seg:=false.] ifFalse: [seg:=true].
 		[seg] whileTrue: [ 
@@ -106,16 +108,16 @@ seguir:= true.
 			[valido] whileFalse: [
 				(codigo allSatisfy: [:c | c isDigit]) ifTrue: [codigo:=codigo asNumber. valido:=true.] ifFalse: [MessageBox notify: 'El codigo debe ser un numero'.].
 			].
-			libro:= biblio verTodos detect: [:libro | (libro id) == codigo ] ifNone: [nil].
+			libro:= biblio verTodos detect: [:libro | (libro verCodigo) == codigo ] ifNone: [nil].
 			(libro isNil) ifFalse: [
 				listar value: libro.
 	
-			choice := ChoicePrompter choices: {'Modificar'. 'Eliminar'. 'Salir'} caption: 'Que desea hacer con el libro?'.
-			(choice== 'Modificar') ifTrue: [ 
+			choice := ChoicePrompter choices: #('Modificar' 'Eliminar' 'Salir') caption: 'Que desea hacer con el libro?'.
+			(choice= 'Modificar') ifTrue: [ 
 				smod:=true.
-				ops:= (libro class == LibroRegular class) ifTrue: [{'Titulo'. 'Genero'. 'Codigo' . 'Copias'. 'Anio'.'Salir'}] ifFalse: [{'Titulo'. 'Genero'. 'Codigo' . 'Copias'. 'Anio'.'Solicitado'.'Salir'}].
+				ops:= (libro class class == LibroRegular class) ifTrue: [#('Titulo' 'Genero' 'Codigo' 'Copias' 'Anio' 'Salir')] ifFalse: [#('Titulo' 'Genero' 'Codigo' 'Copias' 'Anio' 'Solicitado' 'Salir')].
 				[smod] whileTrue: [ choicemod  := ChoicePrompter choices: ops caption: 'Que desea modificar?'.
-				(choicemod== 'Titulo') ifTrue: [ 
+				(choicemod= 'Titulo') ifTrue: [ 
 										valido:=false.
 										[valido] whileFalse: [
 											nomnuevo:= (Prompter prompt:'Ingrese el nuevo titulo del libro')asUppercase.
@@ -124,7 +126,7 @@ seguir:= true.
 										libro modTitulo: nomnuevo.
 										Transcript show: 'Se ha cambiado el titulo con exito'; cr.
 				].
-				(choicemod== 'Genero') ifTrue: [
+				(choicemod= 'Genero') ifTrue: [
 									valido:=false.
 									[valido] whileFalse: [
 										generonuevo:=(Prompter prompt:  'Ingrese el nuevo genero del libro')asUppercase.
@@ -133,13 +135,13 @@ seguir:= true.
 									libro modGenero: generonuevo.
 									Transcript show: 'Se ha cambiado el titulo con exito'; cr.
 				].
-				(choicemod== 'Codigo') ifTrue: [
+				(choicemod= 'Codigo') ifTrue: [
 									valido:=false.
 									[valido] whileFalse: [
 									codigonuevo:=Prompter prompt:  'Ingrese codigo de identificacion del libro'.
 									(codigonuevo allSatisfy: [:c | c isDigit]) ifTrue: [
 										codigonuevo:=codigonuevo asNumber.
-										col:= biblio verTodos collect: [:l | l id].
+										col:= biblio verTodos collect: [:l | l verCodigo].
 										(col includes: codigonuevo) ifTrue: [MessageBox notify: 'El codigo ya esta registrado en otro libro'.] ifFalse: [valido:=true.].
 									] ifFalse: [MessageBox notify: 'El codigo debe ser un numero'.].
 									].
@@ -147,16 +149,16 @@ seguir:= true.
 									Transcript show: 'Se ha cambiado el codigo con exito'; cr. 
 				].
 
-				(choicemod=='Copias') ifTrue: [
+				(choicemod='Copias') ifTrue: [
 									valido:=false.
 									[valido] whileFalse: [
 										stocknuevo:=Prompter prompt: 'Ingrese la nueva cantidad de copias disponibles'.
 										((stocknuevo allSatisfy: [:c | c isDigit]) and: [stocknuevo asNumber >= 0]) ifFalse: [MessageBox notify: 'La cantidad de copias debe ser un numero y no puede ser negativa'.] ifTrue: [valido:=true.].
 									].
-									libro modCopias: stocknuevo. 
+									libro modCopias: stocknuevo asNumber. 
 									Transcript show: 'Se ha cambiado la cantidad de copias disponibles con exito'; cr.
 				].
-				(choicemod== 'Anio') ifTrue: [
+				(choicemod= 'Anio') ifTrue: [
 									valido:=false.
 									[valido] whileFalse: [
 										anionuevo:= Prompter prompt: 'Ingrese el nuevo anio de publicacion del libro'.
@@ -165,7 +167,7 @@ seguir:= true.
 									libro modAnio: anionuevo. 
 									Transcript show: 'Se a cambiado el anio con exito'; cr.
 				].
-				(choicemod=='Solicitado') ifTrue: [
+				(choicemod='Solicitado') ifTrue: [
 									valido:=false.
 									[valido] whileFalse: [
 										solnuevo:=Prompter prompt: 'Ingrese la nueva cantidad de veces que fue solicitado'.
@@ -174,10 +176,10 @@ seguir:= true.
 									libro modSolicitado: solnuevo. 
 									Transcript show: 'Se ha cambiado la cantidad de veces que fue solicitado con exito'; cr.
 				].
-				(choicemod=='Salir') ifTrue: [smod:=false. ].
+				(choicemod='Salir') ifTrue: [smod:=false. ].
 				].
 			].
-			(choice== 'Eliminar') ifTrue: [ biblio eliminarLibro: libro.
+			(choice= 'Eliminar') ifTrue: [ biblio eliminarLibro: libro.
 								Transcript show:'Libro eliminado con exito'; cr. 
 			].
 			(biblio esVacia) ifTrue: [seg:=false.] ifFalse: [seg:=MessageBox confirm: 'Desea buscar otro libro?'.].
@@ -188,43 +190,52 @@ seguir:= true.
 
 
 	(op==3) ifTrue: [ 
-     (biblio esVacia) ifFalse: [ 	 
-	  col:= biblio verTodos.
-	  listarmasdecinco:= col select:[: libro | libro verCopias > 5].
-	  (listarmasdecinco size > 0)ifTrue:[
-	  listarmascincco do: [: libro | listar value: libro].
-		.]ifFalse:[MessageBox notify:'Error: No se encontraron libros que tenga una cantidad de copias mayor a 5']
-     .] ifTrue:[MessageBox notify:'Error la biblioteca esta vacia'].
-]. 
-	(op==4)ifTrue: [
-	  (biblio esVacia) ifFalse: [ 	 
-	  col:= biblio verTodos.
-	  listarochentoso:= col select:[: libro | libro verAnio >= 1980 and [libro verAnio=1990]].
-	  (listarochentoso size > 0)ifTrue:[
-	  listarochentoso do: [: libro | listar value: libro].
-	 .]ifFalse:[MessageBox notify:'Error: No se encontro el anio ingresado'].
-      ] ifTrue:[MessageBox notify:'Error la biblioteca esta vacia'].
-    ]. 
-  ].
-    (op==5)ifTrue[
-	   (biblio esVacia) ifFalse: [ 
-		d:=Dictionary new.
-	    col:= biblio verTodos.
-		genero:= col collect:[:libro | libro verGenero].
-		generosinrepe:= genero asSet.
-		generosinrepe do:[: a | d at:a put:(genero ocurrencesOf:a).
-        Transcrip show:'Cantidad de  libro de genero:', a,' ', d at:a.
-	.]ifTrue:[MessageBox notify:'Error:No se puede buscar datos sobre el genero del libro, la biblioteca esta vacia'].
+		(biblio esVacia) ifFalse: [ 	 
+			col:= biblio verTodos.
+			listarmasdecinco:= col select:[: libro | (libro verCopias) > 5].
+			((listarmasdecinco size) > 0)ifTrue:[
+				Transcript clear; show: 'Libros con mas de 5 copias disponibles:'; cr.
+				listarmasdecinco do: [: libro | listar value: libro.].
+			] ifFalse:[MessageBox notify:'Error: No se encontraron libros que tengan una cantidad de copias mayor a 5']
+		.] ifTrue:[MessageBox notify:'Error: La biblioteca esta vacia'].
 	]. 
-	 (op==6)ifTrue[
-     (biblio esVacia) ifFalse: [ 
-	 col:= biblio verTodos.
-	 sincopias:= col select:[: libro | libro verCopias == 0].
-	 sincopias do:[: libro | listar value: libro.
-	 biblio eliminarLibro:libro.
-	 Transcrip show:'Se a eliminado el libro con exito'].
-	 ]ifTrue:[MessageBox notify'Error: biblioeca sin libros cargados'].
+
+	(op==4) ifTrue: [
+		(biblio esVacia) ifFalse: [ 	 
+			col:= biblio verTodos.
+			listarochentoso:= col select:[: libro | (libro verAnio) >= 1980 and: [(libro verAnio) <=1990]].
+			((listarochentoso size) > 0) ifTrue:[ 
+				Transcript clear; show: 'Libros ochentosos:'; cr.
+				listarochentoso do: [: libro | listar value: libro.].
+			]ifFalse:[MessageBox notify:'Error: No hay libros ochentosos en la biblioteca'].
+		] ifTrue:[MessageBox notify:'Error: La biblioteca esta vacia'].
+    ]. 
+
+	(op==5) ifTrue:[
+		(biblio esVacia) ifFalse: [ 
+			d:=Dictionary new.
+			col:= biblio verTodos.
+			genero:= col collect:[:libro | libro verGenero].
+			generosinrepe:= genero asSet.
+			Transcript clear; show: 'Cantidad de libros por genero'; cr.
+			generosinrepe do:[: a | d at:a put:(genero ocurrencesOf:a).
+			Transcript show:('Genero: :',a,'Cantidad: ', d at:a displayString). ].
+		]ifTrue:[MessageBox notify:'Error:No se puede buscar datos sobre el genero del libro, la biblioteca esta vacia'].
+	]. 
+
+	(op==6) ifTrue:[
+		(biblio esVacia) ifFalse: [ 
+			col:= biblio verTodos.
+			sincopias:= col select:[: libro | (libro verCopias) = 0].
+			((sincopias size) > 0) ifTrue: [
+				Transcript clear; show: 'Libros sin copias:'; cr.
+				sincopias do:[: libro | listar value: libro.
+							biblio eliminarLibro:libro.
+							Transcript show:'Se ha eliminado el libro con exito';cr.].
+			] ifFalse: [MessageBox notify: 'Error: No hay libros sin copias en la biblioteca'.].
+		]ifTrue:[MessageBox notify:'Error: La biblioteca esta vacia'.].
 	].
+
 	 (op==0) ifTrue: [
 		seguir:=false.
 	].
