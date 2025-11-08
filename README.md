@@ -10,7 +10,7 @@ Trabajo final para la materia Paradigmas de programacion. Sistema de gestion de 
 
 - [@sara](https://www.github.com/nardulli03)
 
-- [@belen](https://www.github.com/nardulli03)
+- [@martibelen99](https://www.github.com/martibelen99)
 
 - [@annaluzserena](https://www.github.com/annaluzserena)
 ## Apendice
