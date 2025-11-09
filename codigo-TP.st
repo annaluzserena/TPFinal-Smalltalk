@@ -1,4 +1,4 @@
-| col nom barrio anio cantper biblio seguir dicOp op choice aniopub genero codigo stock cant seg smod valido libro choicemod ops |
+| col nom barrio anio cantper biblio seguir dicOp op choice aniopub genero codigo stock cant seg smod valido libro choicemod ops cant |
 
 Transcript clear.
 
@@ -27,13 +27,12 @@ biblio:= Biblioteca crearBiblioNom: nom anio:anio barrio:barrio personal: cantpe
 
 "Bloque de codigo reutilizable para listar los datos de un libro"
 listar:= [ :libro |
-				Transcript show.
 				Transcript show: 'Titulo: ',(libro verTitulo); cr ;
 				show: 'Genero: ', (libro verGenero) ; cr;
 				show: 'Anio de creacion: ',(libro verAnio displayString); cr;
 				show: 'Copias disponibles: ', (libro verCopias displayString); cr.
 				((libro class class) == (LibroRegular class)) ifTrue: [tipo:='Regular'.] ifFalse: [tipo:='Manual'. Transcript show: 'Cantidad de veces solicitado: ',(libro verSolicitado displayString); cr.].
-				Transcript show: 'Tipo: ',tipo ; cr.]. 
+				Transcript show: 'Tipo: ',tipo ; cr; cr.]. 
 
 "Menu usando un diccionario para que retorne un numero y no un string con la opcion completa"
 dicOp:= OrderedDictionary new.
@@ -110,6 +109,7 @@ seguir:= true.
 			].
 			libro:= biblio verTodos detect: [:libro | (libro verCodigo) == codigo ] ifNone: [nil].
 			(libro isNil) ifFalse: [
+				Transcript clear; show; show: 'DATOS DEL LIBRO CON CODIGO ',(codigo displayString); cr; cr.
 				listar value: libro.
 	
 			choice := ChoicePrompter choices: #('Modificar' 'Eliminar' 'Salir') caption: 'Que desea hacer con el libro?'.
@@ -193,8 +193,8 @@ seguir:= true.
 		(biblio esVacia) ifFalse: [ 	 
 			col:= biblio verTodos.
 			listarmasdecinco:= col select:[: libro | (libro verCopias) > 5].
-			((listarmasdecinco size) > 0)ifTrue:[
-				Transcript clear; show: 'Libros con mas de 5 copias disponibles:'; cr.
+			((listarmasdecinco size) > 0) ifTrue:[
+				Transcript clear; show; show: 'LIBROS CON MAS DE 5 COPIAS DISPONIBLES:'; cr; cr.
 				listarmasdecinco do: [: libro | listar value: libro.].
 			] ifFalse:[MessageBox notify:'Error: No se encontraron libros que tengan una cantidad de copias mayor a 5']
 		.] ifTrue:[MessageBox notify:'Error: La biblioteca esta vacia'].
@@ -205,7 +205,7 @@ seguir:= true.
 			col:= biblio verTodos.
 			listarochentoso:= col select:[: libro | (libro verAnio) >= 1980 and: [(libro verAnio) <=1990]].
 			((listarochentoso size) > 0) ifTrue:[ 
-				Transcript clear; show: 'Libros ochentosos:'; cr.
+				Transcript clear; show; show: 'LIBROS OCHENTOSOS:'; cr; cr.
 				listarochentoso do: [: libro | listar value: libro.].
 			]ifFalse:[MessageBox notify:'Error: No hay libros ochentosos en la biblioteca'].
 		] ifTrue:[MessageBox notify:'Error: La biblioteca esta vacia'].
@@ -217,9 +217,9 @@ seguir:= true.
 			col:= biblio verTodos.
 			genero:= col collect:[:libro | libro verGenero].
 			generosinrepe:= genero asSet.
-			Transcript clear; show: 'Cantidad de libros por genero'; cr.
-			generosinrepe do:[: a | d at:a put:(genero ocurrencesOf:a).
-			Transcript show:('Genero: :',a,'Cantidad: ', d at:a displayString). ].
+			Transcript clear; show; show: 'CANTIDAD DE LIBROS POR GENERO'; cr; cr.
+			generosinrepe do:[: a | d at:a put:(genero occurrencesOf: a).
+			Transcript show:('GENERO: ',a,' CANTIDAD: ', (d at:a) displayString); cr. ].
 		]ifTrue:[MessageBox notify:'Error:No se puede buscar datos sobre el genero del libro, la biblioteca esta vacia'].
 	]. 
 
@@ -228,7 +228,7 @@ seguir:= true.
 			col:= biblio verTodos.
 			sincopias:= col select:[: libro | (libro verCopias) = 0].
 			((sincopias size) > 0) ifTrue: [
-				Transcript clear; show: 'Libros sin copias:'; cr.
+				Transcript clear; show; show: 'LIBROS SIN COPIAS:'; cr; cr.
 				sincopias do:[: libro | listar value: libro.
 							biblio eliminarLibro:libro.
 							Transcript show:'Se ha eliminado el libro con exito';cr.].
