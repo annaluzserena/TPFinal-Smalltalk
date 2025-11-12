@@ -25,6 +25,23 @@ valido:=false.
 
 biblio:= Biblioteca crearBiblioNom: nom anio:anio barrio:barrio personal: cantper.
 
+"Pre-carga de libros"
+
+jsonString := (FileStream read: './libros_precarga.json') contents.
+
+jsonObject := STON.JSON fromString: jsonString.
+
+jsonObject do: [:dic | 
+	((dic at: 'tipo') = 'regular') ifTrue: [
+		libro:=LibroRegular crearLib: (dic at: 'titulo')asUppercase con: (dic at: 'anio') con: (dic at: 'genero')asUppercase con: (dic at: 'codigo') con: (dic at: 'copias').
+	].
+	((dic at: 'tipo') = 'manual') ifTrue: [
+		libro:=LibroManual crearLib: (dic at: 'titulo')asUppercase con: (dic at: 'anio') con: (dic at: 'genero')asUppercase con: (dic at: 'codigo') con: (dic at: 'copias') con: (dic at: 'veces_solicitado').
+	].
+	biblio agregarLibro: libro.
+].
+
+
 "Bloque de codigo reutilizable para listar los datos de un libro"
 listar:= [ :libro |
 				Transcript show: 'Titulo: ',(libro verTitulo); cr ;

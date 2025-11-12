@@ -1,0 +1,231 @@
+[
+  {
+    "titulo": "Cien años de soledad",
+    "autor": "Gabriel García Márquez",
+    "anio": 1967,
+    "genero": "Novela",
+    "tipo": "manual",
+    "codigo": 5159,
+    "copias": 0,
+    "veces_solicitado": 3
+  },
+  {
+    "titulo": "Harry Potter y la piedra filosofal",
+    "autor": "J.K. Rowling",
+    "anio": 1997,
+    "genero": "Fantasía",
+    "tipo": "manual",
+    "codigo": 4879,
+    "copias": 9,
+    "veces_solicitado": 25
+  },
+  {
+    "titulo": "El principito",
+    "autor": "Antoine de Saint-Exupéry",
+    "anio": 1943,
+    "genero": "Infantil",
+    "tipo": "manual",
+    "codigo": 9342,
+    "copias": 9,
+    "veces_solicitado": 22
+  },
+  {
+    "titulo": "Sherlock Holmes: Estudio en escarlata",
+    "autor": "Arthur Conan Doyle",
+    "anio": 1887,
+    "genero": "Misterio",
+    "tipo": "manual",
+    "codigo": 1166,
+    "copias": 5,
+    "veces_solicitado": 5
+  },
+  {
+    "titulo": "Mafalda",
+    "autor": "Quino",
+    "anio": 1964,
+    "genero": "Humor gráfico",
+    "tipo": "manual",
+    "codigo": 5793,
+    "copias": 7,
+    "veces_solicitado": 7
+  },
+  {
+    "titulo": "La Odisea",
+    "autor": "Homero",
+    "anio": -800,
+    "genero": "Épica",
+    "tipo": "manual",
+    "codigo": 9785,
+    "copias": 5,
+    "veces_solicitado": 25
+  },
+  {
+    "titulo": "Martín Fierro",
+    "autor": "José Hernández",
+    "anio": 1872,
+    "genero": "Poesía gauchesca",
+    "tipo": "manual",
+    "codigo": 7381,
+    "copias": 4,
+    "veces_solicitado": 27
+  },
+  {
+    "titulo": "Frankenstein",
+    "autor": "Mary Shelley",
+    "anio": 1818,
+    "genero": "Terror",
+    "tipo": "manual",
+    "codigo": 2929,
+    "copias": 0,
+    "veces_solicitado": 11
+  },
+  {
+    "titulo": "Don Quijote de la Mancha",
+    "autor": "Miguel de Cervantes",
+    "anio": 1605,
+    "genero": "Novela",
+    "tipo": "manual",
+    "codigo": 5174,
+    "copias": 0,
+    "veces_solicitado": 18
+  },
+  {
+    "titulo": "1984",
+    "autor": "George Orwell",
+    "anio": 1949,
+    "genero": "Ciencia ficción",
+    "tipo": "manual",
+    "codigo": 3940,
+    "copias": 6,
+    "veces_solicitado": 27
+  },
+  {
+      "titulo": "El año de la muerte de Ricardo Reis",
+      "autor": "José Saramago",
+      "anio": 1984,
+      "genero": "Novela",
+      "tipo": "manual",
+      "veces_solicitado": 10,
+      "codigo": 1240,
+      "copias": 5
+  },
+  {
+      "titulo": "La casa de los espíritus",
+      "autor": "Isabel Allende",
+      "anio": 1982,
+      "genero": "Novela",
+      "tipo": "manual",
+      "veces_solicitado": 13,
+      "codigo": 1237,
+      "copias": 3
+  },
+  {
+      "titulo": "El túnel",
+      "autor": "Ernesto Sabato",
+      "anio": 1986,
+      "genero": "Novela",
+      "tipo": "manual",
+      "veces_solicitado": 9,
+      "codigo": 1238,
+      "copias": 1
+  },
+  {
+    "titulo": "Rayuela",
+    "autor": "Julio Cortázar",
+    "anio": 1963,
+    "genero": "Novela",
+    "tipo": "regular",
+    "codigo": 1781,
+    "copias": 4
+  },
+  {
+    "titulo": "Las aventuras de Tom Sawyer",
+    "autor": "Mark Twain",
+    "anio": 1876,
+    "genero": "Aventura",
+    "tipo": "regular",
+    "codigo": 6050,
+    "copias": 3
+  },
+  {
+    "titulo": "Ulises",
+    "autor": "James Joyce",
+    "anio": 1922,
+    "genero": "Novela",
+    "tipo": "regular",
+    "codigo": 5455,
+    "copias": 10
+  },
+  {
+    "titulo": "El retrato de Dorian Gray",
+    "autor": "Oscar Wilde",
+    "anio": 1890,
+    "genero": "Novela",
+    "tipo": "regular",
+    "codigo": 6011,
+    "copias": 4
+  },
+  {
+    "titulo": "Drácula",
+    "autor": "Bram Stoker",
+    "anio": 1897,
+    "genero": "Terror",
+    "tipo": "regular",
+    "codigo": 3849,
+    "copias": 0
+  },
+  {
+    "titulo": "La isla del tesoro",
+    "autor": "Robert Louis Stevenson",
+    "anio": 1883,
+    "genero": "Aventura",
+    "tipo": "regular",
+    "codigo": 3284,
+    "copias": 7
+  },
+  {
+    "titulo": "Los miserables",
+    "autor": "Victor Hugo",
+    "anio": 1862,
+    "genero": "Novela",
+    "tipo": "regular",
+    "codigo": 5442,
+    "copias": 6
+  },
+  {
+    "titulo": "Fahrenheit 451",
+    "autor": "Ray Bradbury",
+    "anio": 1953,
+    "genero": "Ciencia ficción",
+    "tipo": "regular",
+    "codigo": 2514,
+    "copias": 6
+  },
+  {
+    "titulo": "La metamorfosis",
+    "autor": "Franz Kafka",
+    "anio": 1915,
+    "genero": "Novela",
+    "tipo": "regular",
+    "codigo": 9474,
+    "copias": 2
+  },
+  {
+    "titulo": "El Hobbit",
+    "autor": "J. R. R. Tolkien",
+    "anio": 1937,
+    "genero": "Fantasía",
+    "tipo": "regular",
+    "codigo": 3383,
+    "copias": 0
+  },
+  {
+      "titulo": "El hacedor",
+      "autor": "Jorge Luis Borges",
+      "anio": 1985,
+      "genero": "Poesía/Cuentos",
+      "tipo": "regular",
+      "codigo": 1249,
+      "copias": 6
+  }
+]
